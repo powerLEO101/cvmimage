@@ -3,7 +3,7 @@ Description=vllm
 After=network-online.target
 
 [Service]
-ExecStart=/opt/venv/bin/vllm serve --host 0.0.0.0 --port 8080 --served-model-name $VLLM_MODE_NAME $VLLM_ARGS $VLLM_MODEL
+ExecStart=/opt/venv/bin/vllm serve --host 0.0.0.0 --port 443 Qwen/Qwen2.5-1.5B-Instruct
 User=root
 Group=root
 Restart=always
@@ -13,7 +13,7 @@ Environment="HOME=/mnt/ramdisk/vllm"
 Environment="VLLM_CACHE_ROOT=/mnt/ramdisk/vllm/cache"
 Environment="VLLM_CONFIG_ROOT=/mnt/ramdisk/vllm/config"
 Environment="VLLM_ASSETS_CACHE=/mnt/ramdisk/vllm/assets"
-EnvironmentFile=/mnt/ramdisk/vllm-env
+# EnvironmentFile=/mnt/ramdisk/vllm-env
 
 [Install]
 WantedBy=default.target

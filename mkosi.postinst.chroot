@@ -4,9 +4,22 @@ set -Eeuo pipefail
 systemctl mask systemd-logind.service
 
 # Install pip packages
+# python3 -m venv /opt/venv
+# source /opt/venv/bin/activate
+# pip install --no-cache-dir nv_attestation_sdk nv-local-gpu-verifier yq vllm[audio]==0.8.5.post1 einops
+# curl -LsSf https://astral.sh/uv/install.sh | sh
 python3 -m venv /opt/venv
 source /opt/venv/bin/activate
-pip install --no-cache-dir nv_attestation_sdk nv-local-gpu-verifier yq vllm[audio]==0.8.5.post1 einops
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 10 --slave /usr/bin/g++ g++ /usr/bin/g++-12
+if [ ! -e vllm_source ]; then
+	git clone https://github.com/vllm-project/vllm.git vllm_source
+fi
+cd vllm_source
+pip install --upgrade pip
+pip install "cmake>=3.26.1" wheel packaging ninja "setuptools-scm>=8" numpy
+pip install -v -r requirements/cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu
+VLLM_TARGET_DEVICE=cpu python setup.py install
+
 
 mkdir -p /mnt/ramdisk/docker-config
 echo "export DOCKER_CONFIG=/mnt/ramdisk/docker-config" >> /root/.bashrc
