@@ -4,6 +4,7 @@ QEMU := /mydata/qemu_main/qemu/build/qemu-system-x86_64
 
 FILE := tinfoilcvm
 CONFIG := config.yml
+EXTERNAL_CONFIG := external.yml
 PORT := 8444
 
 CMD := "readonly=on console=ttyS0 earlyprintk=serial root=/dev/sda2 tinfoil-debug=on tinfoil-config-hash=$(shell sha256sum $(CONFIG) | cut -d ' ' -f 1)"
@@ -33,6 +34,7 @@ run:
 		-device virtio-scsi-pci,id=scsi0,disable-legacy=on,iommu_platform=true \
 		-device scsi-hd,drive=disk0 \
 		-drive file=$(CONFIG),if=none,id=disk1,format=raw,readonly=on \
+		-drive file=$(EXTERNAL_CONFIG),if=none,id=disk2,format=raw,readonly=on \
 		-device virtio-scsi-pci,id=scsi1,disable-legacy=on,iommu_platform=true \
 		-device scsi-hd,drive=disk1 \
 		-machine memory-encryption=sev0,vmport=off \

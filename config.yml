@@ -1,5 +1,18 @@
-models:
-  - name: "casperhansen/llama-3.3-70b-instruct-awq"
-    mpk: "a5682a25b389ffec1f815014f32db5e8408ede5f9858b4892e60f70e04072499_39785426944_105c64df-38c7-599e-8e98-71699d45be86"
+shim-version: v0.1.6@sha256:5c15e58c3c448a55f294ce3525439507bd4129ce943fb00167c3467b7891e3b5
+cvm-version: 0.1.3
+ovmf-version: 0.0.2
 
-vllm-args: --quantization awq --max-model-len 65536
+vllm-args: --host 0.0.0.0 --port 8080 Qwen/Qwen2.5-1.5B-Instruct
+
+shim:
+  listen-port: 443
+  upstream-port: 8080
+  control-plane: ''
+  publish-attestation: true
+  tls-challenge: dns
+  paths:
+    - /v1/completions
+    - /metrics
+  origins:
+    - https://tinfoil.sh
+    - https://chat.tinfoil.sh
